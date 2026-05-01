@@ -1,21 +1,33 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'css/default.css' %}">
+        <script src="{% static 'js/index.js' %}"></script>
         <title>SecAgent-Django</title>
     </head>
     <body>
         <h1>AIエージェントに詐欺サイトかどうか判定してもらう（whoisを使用）</h1>
-        <form method="post">
+        <form id="investigation-form" method="post">
             {% csrf_token %}
             <input type="text" name="user_input" placeholder="調査してほしい怪しいURLを入力" style="width: 400px;">
-            <button type="submit">解析する</button>
+            <button id="submit-btn" type="submit">解析する</button>
         </form>
 
         {% if result %}
             <h2>AIの回答:</h2>
             <p style="white-space: pre-wrap;">{{ result }}</p>
         {% endif %}
+        <script>
+        document.getElementById('investigation-form').addEventListener('submit', function(e) {
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerText = '調査中です...';
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'not-allowed';
+        });
+        </script>
     </body>
 </html>
